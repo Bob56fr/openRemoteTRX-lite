@@ -560,10 +560,16 @@ class RigService : Service() {
         }
         if (wifiLock == null) {
             wifiLock = applicationContext.getSystemService(WifiManager::class.java)
-                ?.createWifiLock(WifiManager.WIFI_MODE_FULL_LOW_LATENCY, "openRemoteTRX:rig")
+                ?.createWifiLock(wifiLockMode(), "openRemoteTRX:rig")
                 ?.apply { setReferenceCounted(false); acquire() }
         }
     }
+
+    /** Faible latence à partir d'Android 10 (valeur 4) ; Android 8 / 9 la refusent (plantage du service, essai du lot 2) :
+     *  haute performance à la place. Constante non signalée par le lint (valeur inlinée). */
+    @Suppress("DEPRECATION")
+    private fun wifiLockMode(): Int =
+        if (Build.VERSION.SDK_INT >= 29) WifiManager.WIFI_MODE_FULL_LOW_LATENCY else WifiManager.WIFI_MODE_FULL_HIGH_PERF
 
     private fun releaseLocks() {
         wakeLock?.let { if (it.isHeld) it.release() }

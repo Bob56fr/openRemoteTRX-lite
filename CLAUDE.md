@@ -27,13 +27,19 @@ Client Android d'une station openRemoteTRX pour Android 8.0 à 9 (API 26 à 28).
   `docs/journal.md` (une entrée numérotée par étape, jamais supprimée).
 - Tableau de pilotage : fiche `openremotetrx-lite` (voir le CLAUDE.md du dépôt principal pour l'outil et les règles).
 
-## État actuel (0.2.0, étape 2)
+## État actuel (0.2.1, étape 3)
 
-Lots 0 et 1 FAITS (journal) : Android Auto, mode conduite automatique, radio du téléphone, enregistrements MediaStore
-supprimés ; QR code dans une image par `BitmapFactory` ; avertissement au premier lancement ; petit waterfall et spectre
-HF de la tablette éteints par défaut ; lint sans erreur. SUIVANT : lot 2 = émulateurs Android 8.1 et 9 (images système
-à installer sur tour radio : seule l'API 37 y est), puis un vrai téléphone (l'utilisateur en cherche un).
-Comparaison des fonctions avec l'application principale : § 4 bis du cahier.
+Lots 0, 1 et 2 (émulateurs) FAITS (journal) : sur Android 8.1 et 9, connexion, émission, STOP et pannes (application
+tuée, réseau coupé) réussis contre la station factice. SUIVANT : vrai téléphone Android 8 ou 9 (l'utilisateur en
+cherche un) : son reçu, micro, casque Bluetooth, écran éteint 30 min, 10 émissions sur charge fictive ; puis lot 3
+(publication). Comparaison des fonctions : § 4 bis du cahier.
+
+## Essais sur émulateur (tour radio)
+
+`tools/emulateur/` : `start-station.ps1 -MotDePasse …` (station factice, port 18443 ; empreinte dans
+`C:\dev\lite-essai\station.log`), `start-emu.ps1 lite81` ou `lite9` (démarre et installe l'APK), `pair.ps1 -Empreinte …
+-MotDePasse …` (premier lancement), `drills.ps1` (STOP, application tuée, réseau coupé ; état lu dans le fichier d'état
+de la station). Constante d'Android plus récente qu'Android 8 : le lint ne la voit pas, l'émulateur oui.
 
 ## Construire
 
