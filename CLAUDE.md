@@ -27,16 +27,17 @@ Client Android d'une station openRemoteTRX pour Android 8.0 à 9 (API 26 à 28).
   `docs/journal.md` (une entrée numérotée par étape, jamais supprimée).
 - Tableau de pilotage : fiche `openremotetrx-lite` (voir le CLAUDE.md du dépôt principal pour l'outil et les règles).
 
-## État actuel (0.1.0, étape 1)
+## État actuel (0.2.0, étape 2)
 
-Copie de l'application principale 0.90.0 (`:core`, `:app`, historique gardé), `minSdk 26`, APK compilé. Lot 1 À FAIRE
-(cahier § 4) : supprimer Android Auto, détail radio du téléphone, enregistrements MediaStore (image de TOS, export
-SELCALL), `currentControllerInfo` ; QR code dans une image par `BitmapFactory` ; défauts allégés (§ 5) ;
-avertissement « téléphone sans mises à jour de sécurité » à la première connexion (décidé OUI le 2026-11-22, § 7).
-Comparaison des fonctions avec l'application principale : § 4 bis du cahier. Téléphone réel : l'utilisateur en cherche
-un.
+Lots 0 et 1 FAITS (journal) : Android Auto, mode conduite automatique, radio du téléphone, enregistrements MediaStore
+supprimés ; QR code dans une image par `BitmapFactory` ; avertissement au premier lancement ; petit waterfall et spectre
+HF de la tablette éteints par défaut ; lint sans erreur. SUIVANT : lot 2 = émulateurs Android 8.1 et 9 (images système
+à installer sur tour radio : seule l'API 37 y est), puis un vrai téléphone (l'utilisateur en cherche un).
+Comparaison des fonctions avec l'application principale : § 4 bis du cahier.
 
 ## Construire
 
-`gradlew.bat test assembleDebug lintDebug` avec JAVA_HOME = jbr d'Android Studio. Le PC « tour radio » n'a ni SDK
-Android ni Java (2026-11-22).
+`gradlew.bat test assembleDebug lintDebug` avec JAVA_HOME = jbr d'Android Studio. Sur le PC « tour radio »
+(`chris@192.168.1.193`, Android Studio et SDK API 37, demande de l'utilisateur : y compiler pour ne pas charger le PC de
+travail) : archive tar sans `.git` ni `build` envoyée par scp dans `C:\dev\openRemoteTRX-lite-build`, `local.properties`
+= `sdk.dir=C\:\\Users\\chris\\AppData\\Local\\Android\\Sdk`, `gradlew.bat --no-daemon` en priorité basse (33 s).

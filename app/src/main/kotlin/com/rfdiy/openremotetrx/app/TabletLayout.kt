@@ -83,7 +83,7 @@ internal fun RigScope.TabletLayout(
     var section by rememberSaveable { mutableStateOf(Tab.MEMOIRES) }
     var expanded by rememberSaveable { mutableStateOf(false) }
     var textPct by remember { mutableIntStateOf(ScreenLayouts.fontPct(prefs.getInt(PREF_TEXT_PCT, -1).takeIf { it > 0 })) }
-    var showHf by remember { mutableStateOf(prefs.getBoolean(PREF_HF, true)) }
+    var showHf by remember { mutableStateOf(prefs.getBoolean(PREF_HF, false)) }
     var showAudio by remember { mutableStateOf(prefs.getBoolean(PREF_AUDIO, true)) }
     var split by remember { mutableFloatStateOf(ScreenLayouts.split(prefs.getFloat(PREF_SPLIT, ScreenLayouts.SPLIT_DEFAULT))) }
     var topPx by remember { mutableIntStateOf(0) }

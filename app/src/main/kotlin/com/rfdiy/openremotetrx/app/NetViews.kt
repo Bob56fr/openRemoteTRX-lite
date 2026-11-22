@@ -265,39 +265,3 @@ private fun ThresholdCard(t: NetUi.Thresholds, rttEdges: List<Double>, lossEdges
             modifier = Modifier.alpha(0.9f))
     }
 }
-
-/**
- * Sonde réseau, changement de cellule (version installée à la main seulement, BuildConfig.CELL_INFO) : désactivé par
- * défaut ; l'autorisation de localisation est demandée à l'activation et ne sert qu'à l'identifiant de la cellule.
- */
-@Composable
-fun NetCellsSection() {
-    val context = LocalContext.current
-    val prefs = remember { context.getSharedPreferences(RigHub.PREFS, android.content.Context.MODE_PRIVATE) }
-    var on by remember { mutableStateOf(prefs.getBoolean(RigHub.PREF_NET_CELLS, false)) }
-    val ask = androidx.activity.compose.rememberLauncherForActivityResult(
-        androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions(),
-    ) { granted ->
-        val ok = granted[android.Manifest.permission.ACCESS_FINE_LOCATION] == true
-        on = ok
-        prefs.edit().putBoolean(RigHub.PREF_NET_CELLS, ok).apply()
-        if (!ok) android.widget.Toast.makeText(context, Tr.t("netviews.permission_denied"), android.widget.Toast.LENGTH_LONG).show()
-    }
-    Text(Tr.t("netviews.network_quality"), style = MaterialTheme.typography.titleSmall)
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        AppSwitch(checked = on, onCheckedChange = { wanted ->
-            if (wanted) {
-                ask.launch(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION))
-            } else {
-                on = false
-                prefs.edit().putBoolean(RigHub.PREF_NET_CELLS, false).apply()
-            }
-        })
-        Spacer(Modifier.width(8.dp))
-        Column {
-            Text(Tr.t("netviews.cells"), style = MaterialTheme.typography.bodyMedium)
-            Text(Tr.t("netviews.cells_note"),
-                color = Page.TEXTE_2, style = MaterialTheme.typography.bodySmall)
-        }
-    }
-}

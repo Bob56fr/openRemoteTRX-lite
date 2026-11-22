@@ -21,26 +21,12 @@
             android:name=".RigService"
             android:exported="false"
             android:foregroundServiceType="microphone|mediaPlayback" />
-        <!-- Android Auto (lot A2) : exporté pour que la voiture le trouve ; RigAutoService.onGetRoot n'admet qu'Android
-             Auto, Android Automotive, l'interface système et l'application ; prendre l'émission : voiture et application
-             seulement (logic.Car.allowed). -->
-        <service
-            android:name=".RigAutoService"
-            android:exported="true"
-            tools:ignore="ExportedService">
-            <intent-filter>
-                <action android:name="android.media.browse.MediaBrowserService" />
-            </intent-filter>
-        </service>
-        <!-- Pochettes d'Android Auto (F5) : exporté en lecture seule pour que la voiture lise l'image ; seules les clés
-             de logic.Artwork sont servies (images, aucune donnée). -->
+        <!-- Pochettes de la session média (écran verrouillé, notification) : exporté en lecture seule pour que
+             l'interface système lise l'image ; seules les clés de logic.Artwork sont servies (images, aucune donnée). -->
         <provider
             android:name=".ArtworkProvider"
             android:authorities="${applicationId}.artwork"
             android:exported="true"
             tools:ignore="ExportedContentProvider" />
-        <meta-data
-            android:name="com.google.android.gms.car.application"
-            android:resource="@xml/automotive_app_desc" />
     </application>
 </manifest>

@@ -219,18 +219,10 @@ internal fun RigScope.SettingsTab(textPct: Int? = null, onTextPct: (Int) -> Unit
                 Spacer(Modifier.width(8.dp))
                 Text(Tr.t("settingstab.driving"), style = MaterialTheme.typography.bodyMedium)
             }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                AppSwitch(checked = drivingAuto, onCheckedChange = {
-                    drivingAuto = it
-                    prefs.edit().putBoolean(RigHub.PREF_DRIVING_AUTO, it).apply()
-                })
-                Spacer(Modifier.width(8.dp))
-                Text(Tr.t("settingstab.driving_auto"), style = MaterialTheme.typography.bodyMedium)
-            }
             }
             Panel { MicSection() }
             Panel { HeadsetSection(ui.headsetMic) }
-            if (BuildConfig.CELL_INFO && rig.net != null) Panel { NetCellsSection() }   // absent de la version Google Play
+   // absent de la version Google Play
             rig.presence?.takeIf { it.switchShown }?.let { p -> Panel { ListenersSwitch(p) } }   // opérateur seulement
             // « Fonctionnalités mobiles » (étape 300) : affichage des fonctions ; une fonction en service reste affichée
             val voiceNow by com.rfdiy.openremotetrx.core.VoiceHub.ui.collectAsState()

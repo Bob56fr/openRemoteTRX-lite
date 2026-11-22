@@ -438,7 +438,7 @@ private fun ShackWatch(rig: RigState, onClose: () -> Unit) {
     val view = friendsView(rig, now)
     Dialog(onDismissRequest = onClose, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         val v = LocalView.current
-        val activity = LocalContext.current as? Activity
+        val activity = androidx.activity.compose.LocalActivity.current
         DisposableEffect(Unit) {
             v.keepScreenOn = true
             val window = activity?.window

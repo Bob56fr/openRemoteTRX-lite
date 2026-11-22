@@ -138,8 +138,8 @@ fun RigScreen(ui: RigUi, modifier: Modifier, onDisconnect: () -> Unit) {
     var drivingManual by drivingManualS
     val drivingAutoS = remember { mutableStateOf(prefs.getBoolean(RigHub.PREF_DRIVING_AUTO, true)) }
     var drivingAuto by drivingAutoS
-    val carMode = (LocalConfiguration.current.uiMode and Configuration.UI_MODE_TYPE_MASK) == Configuration.UI_MODE_TYPE_CAR
-    val driving = Driving.reason(drivingManual, drivingAuto, ui.carConnected || carMode, ui.passenger)
+    // openRemoteTRX Lite : mode conduite MANUEL seulement (sans Android Auto, aucune voiture détectée)
+    val driving = Driving.reason(drivingManual, false, false, ui.passenger)
     if (Driving.active(driving)) {
         DrivingScreen(ui, driving, modifier) { drivingManual = false; prefs.edit().putBoolean(RigHub.PREF_DRIVING, false).apply() }
         return
@@ -200,7 +200,7 @@ fun RigScreen(ui: RigUi, modifier: Modifier, onDisconnect: () -> Unit) {
     var netOpen by netOpenS
     val netDialogS = remember { mutableStateOf(false) }                      // détail de la liaison
     var netDialog by netDialogS
-    val miniWfS = remember { mutableStateOf(prefs.getBoolean("mini_wf", true)) }     // petit waterfall de l'onglet Station
+    val miniWfS = remember { mutableStateOf(prefs.getBoolean("mini_wf", false)) }     // petit waterfall de l'onglet Station
     var miniWf by miniWfS
     fun setMiniWf(on: Boolean) { miniWf = on; prefs.edit().putBoolean("mini_wf", on).apply() }
     val tabS = rememberSaveable { mutableStateOf(Tab.STATION) }

@@ -4,7 +4,7 @@ package com.rfdiy.openremotetrx.app
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -292,15 +292,13 @@ private const val QR_IMAGE_MAX = 2000
 
 /** Texte du QR code d'une image de la bibliothèque, null si illisible ou sans QR code. Hors du fil principal. */
 private fun qrFromImage(context: Context, uri: Uri): String? = runCatching {
-    val source = ImageDecoder.createSource(context.contentResolver, uri)
-    val bitmap = ImageDecoder.decodeBitmap(source) { decoder, info, _ ->
-        decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE                      // pixels lisibles (getPixels)
-        val big = maxOf(info.size.width, info.size.height)
-        if (big > QR_IMAGE_MAX) {
-            val k = QR_IMAGE_MAX.toFloat() / big
-            decoder.setTargetSize((info.size.width * k).toInt().coerceAtLeast(1), (info.size.height * k).toInt().coerceAtLeast(1))
-        }
-    }
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
+    var sample = 1
+    while (maxOf(bounds.outWidth, bounds.outHeight) / sample > QR_IMAGE_MAX) sample *= 2
+    val opts = BitmapFactory.Options().apply { inSampleSize = sample; inPreferredConfig = Bitmap.Config.ARGB_8888 }
+    val bitmap = context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, opts) }
+        ?: return@runCatching null
     val argb = if (bitmap.config == Bitmap.Config.ARGB_8888) bitmap else bitmap.copy(Bitmap.Config.ARGB_8888, false)
     val px = IntArray(argb.width * argb.height)
     argb.getPixels(px, 0, argb.width, 0, 0, argb.width, argb.height)

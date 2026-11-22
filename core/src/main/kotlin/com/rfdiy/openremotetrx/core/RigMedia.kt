@@ -178,27 +178,12 @@ internal object RigMedia {
         // quand même (onMediaButtonEvent).
         val b = PlaybackState.Builder()
             .setActions(
-                PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE or PlaybackState.ACTION_PLAY_PAUSE or PlaybackState.ACTION_STOP or
-                    PlaybackState.ACTION_PLAY_FROM_MEDIA_ID or PlaybackState.ACTION_PLAY_FROM_SEARCH,
+                PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE or PlaybackState.ACTION_PLAY_PAUSE or PlaybackState.ACTION_STOP,
             )
             .setState(state, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1f)
         if (state == PlaybackState.STATE_ERROR) b.setErrorMessage(sc.error)
-        for (button in sc.buttons) {
-            b.addCustomAction(PlaybackState.CustomAction.Builder(button.action.id, button.label, icon(button.icon)).build())
-        }
+        // openRemoteTRX Lite : aucun bouton de voiture (Android Auto exige Android 11, retiré)
         return b.build()
-    }
-
-    private fun icon(icon: CarIcon): Int = when (icon) {
-        CarIcon.PTT -> R.drawable.ic_car_ptt
-        CarIcon.STOP -> R.drawable.ic_car_stop
-        CarIcon.HAND -> R.drawable.ic_car_hand
-        CarIcon.LOCK_CLOSED -> R.drawable.ic_car_lock_closed
-        CarIcon.LOCK_OPEN -> R.drawable.ic_car_lock_open
-        CarIcon.LOCK_TX -> R.drawable.ic_car_lock_tx
-        CarIcon.LOCK_UNKNOWN -> R.drawable.ic_car_lock_unknown
-        CarIcon.MEM_PREV -> R.drawable.ic_car_mem_prev
-        CarIcon.MEM_NEXT -> R.drawable.ic_car_mem_next
     }
 
     /**
@@ -252,19 +237,6 @@ internal object RigMedia {
     private const val SKIP_DELAY_MS = 300L
     private const val TEXT_PERIOD_MS = 1000L
 
-    /** Cadenas sans effet : pourquoi. */
-    private fun lockInfo(): String {
-        val rig = RigHub.ui.value.rig
-        return when {
-            rig.status != LinkStatus.CONNECTED -> Tr.t("rigmedia.lock_unknown")
-            rig.ptt?.let { it.mine && it.transmitting } == true -> Tr.t("rigmedia.lock_tx")
-            else -> Tr.t("rigmedia.lock_rx_only")
-        }
-    }
-
-    /** Paquet de l'application qui envoie la commande en cours (null si Android ne le dit pas). */
-    private fun caller(): String? = runCatching { session?.currentControllerInfo?.packageName }.getOrNull()
-
     private fun note(text: String, warn: Boolean = true) {
         RigHub.service?.onRig { s, now -> s.note(now, text, warn) }
     }
@@ -298,45 +270,6 @@ internal object RigMedia {
             if (ptt?.transmitting == true) RigHub.stop()             // ne fait que couper
         }
 
-        override fun onCustomAction(action: String, extras: Bundle?) {
-            val a = CarAction.of(action) ?: return
-            val who = caller()
-            val mine = RigHub.ui.value.rig.ptt?.mine == true
-            if (!Car.allowed(a, who, mine)) {
-                note(Tr.t("rigmedia.action_refused", "action" to a.id, "caller" to (who ?: Tr.t("rigmedia.unknown_app"))))
-                return
-            }
-            when (a) {
-                CarAction.PTT -> RigHub.toggle()
-                CarAction.STOP -> RigHub.stop()
-                CarAction.ARM -> RigHub.setArmed(true)
-                CarAction.DISARM -> RigHub.setArmed(false)
-                CarAction.RELEASE_LOCAL -> RigHub.releaseLocal()
-                CarAction.LOCK_INFO -> note(lockInfo(), warn = false)
-                CarAction.MEM_PREV -> skip(forward = false)
-                CarAction.MEM_NEXT -> skip(forward = true)
-            }
-        }
-
-        override fun onPlayFromMediaId(mediaId: String, extras: Bundle?) {
-            val (kind, value) = mediaId.split(":", limit = 2).let { it[0] to it.getOrElse(1) { "" } }
-            when (kind) {
-                RigAutoService.STATION -> RigHub.connectFromCar(app, value)
-                RigAutoService.MEMORY -> RigHub.recallMemory(value)
-                RigAutoService.BAND -> RigHub.selectBand(value)
-                RigAutoService.DISCONNECT -> RigHub.disconnect(app)
-            }
-        }
-
-        override fun onPlayFromSearch(query: String?, extras: Bundle?) {
-            when (val v = Voice.parse(query, Favorites.list(RigHub.ui.value.rig.memories))) {   // favorites seulement sur la voiture
-                VoiceAction.Listen -> RigHub.setMuted(false)
-                is VoiceAction.RecallMemory -> RigHub.recallMemory(v.memory.id)
-                is VoiceAction.SelectBand -> RigHub.selectBand(v.key)
-                is VoiceAction.SetFrequency -> RigHub.setFrequency(v.hz)
-                is VoiceAction.Unknown -> note(Tr.t("rigmedia.voice_not_understood", "text" to v.text))
-            }
-        }
     }
 
     /** Démarre le service au premier plan depuis la voiture ; faux si Android le refuse (application en arrière-plan). */

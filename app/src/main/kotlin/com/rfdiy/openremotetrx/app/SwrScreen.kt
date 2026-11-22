@@ -156,17 +156,6 @@ private fun shareImage(context: Context, bmp: Bitmap, name: String) {
     context.startActivity(Intent.createChooser(send, Tr.t("swrscreen.share_chooser")))
 }
 
-/** « Enregistrer dans Images » : Images/OpenRemoteTRX (Android 10+, sans autorisation). */
-private fun saveImage(context: Context, bmp: Bitmap, name: String): Boolean {
-    val values = ContentValues().apply {
-        put(MediaStore.Images.Media.DISPLAY_NAME, fileName(name))
-        put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/OpenRemoteTRX")
-    }
-    val uri = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values) ?: return false
-    return context.contentResolver.openOutputStream(uri)?.use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) } ?: false
-}
-
 /**
  * Mesure de TOS (docs/tos-cahier-des-charges.md) : écran plein écran ouvert depuis les Réglages. Chaque point est une
  * prise d'émission NORMALE de ce téléphone (« Émission autorisée », STOP toujours possible) ; la station décide de tout.
@@ -292,7 +281,6 @@ fun SwrScreen(rig: RigState, onClose: () -> Unit) {
                     Text(SwrUi.summary(shown), style = MaterialTheme.typography.bodyMedium)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Button(onClick = { naming = lastName to true }) { Text(Tr.t("common.share")) }
-                        OutlinedButton(onClick = { naming = lastName to false }) { Text(Tr.t("swrscreen.save_images")) }
                     }
                     TextButton(onClick = { restoredOpen = shown }) { Text(Tr.t("swrscreen.restored")) }
                 }
@@ -334,8 +322,7 @@ fun SwrScreen(rig: RigState, onClose: () -> Unit) {
                     val result = shown ?: return@TextButton
                     val bmp = swrImage(context, result, name)
                     runCatching {
-                        if (share) shareImage(context, bmp, name)
-                        else say(if (saveImage(context, bmp, name)) Tr.t("swrscreen.image_saved") else Tr.t("swrscreen.save_failed"))
+                        shareImage(context, bmp, name)                 // Lite : partage seulement (Images exige Android 10)
                     }.onFailure { say(Tr.t("swrscreen.image_failed", "error" to "${it.message}")) }
                 }) { Text(if (share) Tr.t("common.share") else Tr.t("common.save")) }
             },

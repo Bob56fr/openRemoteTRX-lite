@@ -313,7 +313,7 @@ private fun ScramblerPanel(scr: ScramblerSettings, panel: @Composable (@Composab
         Text(Tr.t("voicescreen.scrambler_title"), style = MaterialTheme.typography.titleSmall)
         Text(Tr.t(if (BuildConfig.SCRAMBLER) "voicescreen.scrambler_hint" else "voicescreen.descrambler_hint"), color = Page.TEXTE_2, style = MaterialTheme.typography.bodySmall)
         if (BuildConfig.SCRAMBLER) Row(verticalAlignment = Alignment.CenterVertically) {   // absent de la version Google Play
-            val breizh = VoiceHub.ui.value.breizh                         // Breizh et scrambler d'émission exclusifs
+            val breizh = VoiceHub.ui.collectAsState().value.breizh        // Breizh et scrambler d'émission exclusifs
             AppSwitch(checked = scr.tx, onCheckedChange = { change(scr.copy(tx = it)) }, enabled = !breizh)
             Spacer(Modifier.width(8.dp))
             Text(if (breizh) Tr.t("voicescreen.scramble_tx_breizh") else Tr.t("voicescreen.scramble_tx"),

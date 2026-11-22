@@ -91,6 +91,7 @@ class MainActivity : ComponentActivity() {
                         App(store, Modifier.padding(padding))
                     }
                     Splash()
+                    LiteWarning()                                  // Android 8 / 9 : téléphone sans mises à jour de sécurité
                 }
             }
         }

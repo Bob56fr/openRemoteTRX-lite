@@ -201,7 +201,6 @@ fun SelcallDialog(
                         }
                     }, enabled = ok) { Text(if (player != null) Tr.t("common.stop") else Tr.t("selcallpanel.listen")) }
                     Button(onClick = { note = share(context, testCode) }, enabled = ok) { Text(Tr.t("common.share")) }
-                    OutlinedButton(onClick = { note = saveToDownloads(context, testCode) }, enabled = ok) { Text(Tr.t("selcallpanel.downloads")) }
                 }
                 if (note.isNotEmpty()) Text(note, color = Page.TEXTE_2, style = MaterialTheme.typography.bodySmall)
             }
@@ -224,19 +223,4 @@ private fun share(context: Context, code: String): String = try {
     ""
 } catch (e: Exception) {
     Tr.t("selcallpanel.share_failed", "error" to "${e.message}")
-}
-
-/** Copie dans Téléchargements (Android 10+, sans autorisation) : retrouvable ensuite par n'importe quelle application. */
-private fun saveToDownloads(context: Context, code: String): String = try {
-    val values = ContentValues().apply {
-        put(MediaStore.Downloads.DISPLAY_NAME, "selcall-$code.wav") // i18n-ok
-        put(MediaStore.Downloads.MIME_TYPE, "audio/wav")
-        put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
-    }
-    val resolver = context.contentResolver
-    val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values) ?: error(Tr.t("selcallpanel.place_refused"))
-    resolver.openOutputStream(uri)?.use { it.write(SelcallTones.testWav(code)) } ?: error(Tr.t("selcallpanel.write_refused"))
-    Tr.t("selcallpanel.saved", "code" to code)
-} catch (e: Exception) {
-    Tr.t("selcallpanel.save_failed", "error" to "${e.message}")
 }
