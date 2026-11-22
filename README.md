@@ -1,34 +1,35 @@
-# Application Android openRemoteTRX
+# openRemoteTRX Lite
 
-Client Android de la station openRemoteTRX. Cahier des charges : [`docs/android-cahier-des-charges.md`](../docs/android-cahier-des-charges.md) ; protocole : [`docs/protocole.md`](../docs/protocole.md).
+Android client for an [openRemoteTRX](https://github.com/Bob56fr/openRemoteTRX) station, for phones running
+**Android 8.0, 8.1 and 9** (the main app needs Android 10 or newer). Same station, same transmit safety; features
+that these Android versions cannot support (Android Auto, phone radio details…) are removed.
 
-- Identifiant du paquet : `com.rfdiy.openremotetrx` (ne jamais le changer). Android 10 (API 29) minimum.
-- Les règles de sécurité d'émission (PTT en toggle, état de la station seul affiché, battements, RX à la reconnexion, STOP partout) sont celles de `CLAUDE.md` : l'application ne retire et ne remplace aucune sécurité de la station.
+Client Android d'une station [openRemoteTRX](https://github.com/Bob56fr/openRemoteTRX) pour les téléphones sous
+**Android 8.0, 8.1 et 9** (l'application principale exige Android 10 ou plus récent). Même station, même sécurité
+d'émission ; les fonctions que ces versions d'Android ne permettent pas (Android Auto, détail radio du téléphone…)
+sont retirées. Cahier des charges : [`docs/android8-cahier-des-charges.md`](https://github.com/Bob56fr/openRemoteTRX/blob/main/docs/android8-cahier-des-charges.md).
 
-## Modules
+## Structure
 
-| Module | Contenu | Android ? |
+| Module | Origine | Android ? |
 |---|---|---|
-| `:protocol` | messages et commandes, décodage tolérant, constantes | non (Kotlin/JVM) |
-| `:logic` | affichage de l'émission, battements, surveillance de la liaison, reconnexion, armement, textes | non (Kotlin/JVM) |
-| `:core` | `RigService` (seul propriétaire de la connexion), WebRTC, HTTPS épinglé, comptes, sons | oui |
-| `:app` | écrans Compose (stations, station connectée) | oui |
+| `:protocol` | `upstream/android/protocol` (sous-module, dépôt principal) | non (Kotlin/JVM) |
+| `:logic` | `upstream/android/logic` (sous-module, dépôt principal) : RigSession, battements, refus, textes | non (Kotlin/JVM) |
+| `:core` | ce dépôt : service, WebRTC, son, Bluetooth | oui, `minSdk 26` |
+| `:app` | ce dépôt : écrans Compose | oui, `minSdk 26` |
 
-Les tests de `:protocol` lisent les exemples partagés `../tests/protocol/` (les mêmes que pytest et la page) ; ceux de `:logic` comparent les textes avec `client.js`.
+Identifiant : `com.rfdiy.openremotetrx.lite` (ne jamais le changer).
 
-## Construire et tester
-
-Prérequis : Android Studio (il fournit le JDK, le SDK et l'émulateur). En ligne de commande, `JAVA_HOME` désigne son JDK :
-`C:\Program Files\Android\Android Studio\jbr` (Windows). Gradle 9.1 est téléchargé par le lanceur au premier usage.
+## Construire
 
 ```
-cd android
-gradlew.bat test assembleDebug     # Windows ; APK : app/build/outputs/apk/debug/app-debug.apk
-./gradlew test assembleDebug       # Linux
+git clone --recurse-submodules https://github.com/Bob56fr/openRemoteTRX-lite.git
+cd openRemoteTRX-lite
+gradlew.bat test assembleDebug        # JAVA_HOME = jbr d'Android Studio
 ```
 
-Google Play (test interne) : `gradlew.bat bundlePlay` -> `app/build/outputs/bundle/play/app-play.aab`, signé par la clé
-d'envoi (`keystore.properties`, hors dépôt), sans le scrambler : voir `docs/android-play-store.md`.
+Mettre à jour le code partagé : `git -C upstream pull origin main`, puis `gradlew.bat test` et commit du sous-module.
 
-Installer sur un téléphone branché en USB (débogage USB activé) : `adb install -r app/build/outputs/apk/debug/app-debug.apk`
-(adb : `%LOCALAPPDATA%\Android\Sdk\platform-tools`).
+## Licence
+
+AGPL-3.0-or-later (fichier `LICENSE`). Copyright (C) 2026 RF-DIY.COM.

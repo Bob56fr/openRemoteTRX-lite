@@ -12,11 +12,11 @@ android {
     namespace = "com.rfdiy.openremotetrx.app"
     compileSdk = 37
     defaultConfig {
-        applicationId = "com.rfdiy.openremotetrx"      // ne jamais le changer
-        minSdk = 29                                     // Android 10 (décision de l'utilisateur)
+        applicationId = "com.rfdiy.openremotetrx.lite" // ne jamais le changer (openRemoteTRX Lite)
+        minSdk = 26                                     // Android 8.0 (décision de l'utilisateur, 2026-11-22)
         targetSdk = 36
-        versionCode = 97
-        versionName = "0.90.0"
+        versionCode = 1
+        versionName = "0.1.0"
         buildConfigField("boolean", "SCRAMBLER", "true")
         // Sonde réseau : changement de cellule (autorisation de localisation, manifestes debug / release seulement)
         buildConfigField("boolean", "CELL_INFO", "true")

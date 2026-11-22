@@ -1,0 +1,9 @@
+# Constructions, réglages locaux, clés de signature (jamais dans le dépôt public)
+build/
+.gradle/
+.idea/
+.kotlin/
+local.properties
+keystore.properties
+*.keystore
+*.jks
