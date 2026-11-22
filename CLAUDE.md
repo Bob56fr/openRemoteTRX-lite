@@ -31,7 +31,10 @@ Client Android d'une station openRemoteTRX pour Android 8.0 à 9 (API 26 à 28).
 
 Copie de l'application principale 0.90.0 (`:core`, `:app`, historique gardé), `minSdk 26`, APK compilé. Lot 1 À FAIRE
 (cahier § 4) : supprimer Android Auto, détail radio du téléphone, enregistrements MediaStore (image de TOS, export
-SELCALL), `currentControllerInfo` ; QR code dans une image par `BitmapFactory` ; défauts allégés (§ 5).
+SELCALL), `currentControllerInfo` ; QR code dans une image par `BitmapFactory` ; défauts allégés (§ 5) ;
+avertissement « téléphone sans mises à jour de sécurité » à la première connexion (décidé OUI le 2026-11-22, § 7).
+Comparaison des fonctions avec l'application principale : § 4 bis du cahier. Téléphone réel : l'utilisateur en cherche
+un.
 
 ## Construire
 
