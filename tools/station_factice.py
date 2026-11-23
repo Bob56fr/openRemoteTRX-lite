@@ -32,7 +32,7 @@ RIGCTLD_PORT = 14532
 BUS_PORT = 47910
 
 
-def build(folder: Path, password: str, account: str, bind: str = "127.0.0.1") -> Path:
+def build(folder: Path, password: str, account: str, bind: str = "127.0.0.1", sink: str = "null") -> Path:
     folder.mkdir(parents=True, exist_ok=True)
     cert, key = folder / "station.crt", folder / "station.key"
     if not cert.exists():
@@ -45,7 +45,7 @@ def build(folder: Path, password: str, account: str, bind: str = "127.0.0.1") ->
     cfg.network.tls_cert, cfg.network.tls_key = str(cert), str(key)
     cfg.network.ice_servers = []
     cfg.audio.capture_device = "tone:600"
-    cfg.audio.playback_device = "null"
+    cfg.audio.playback_device = sink
     cfg.supervisor.state_dir = str(folder / "etat")
     cfg.supervisor.status_path = str(folder / "etat" / "status.json")
     cfg.modules.bus_port = BUS_PORT
@@ -66,8 +66,11 @@ def main() -> int:
     ap.add_argument("--compte", default="lite")
     ap.add_argument("--ecoute", default="127.0.0.1",
                     help="adresse d'écoute : 127.0.0.1 (émulateur) ou l'adresse de la machine dans le réseau local (vrai téléphone)")
+    ap.add_argument("--enregistrer", type=Path, default=None,
+                    help="fichier WAV où écrire le son ÉMIS par le téléphone (au lieu de la sortie nulle) : mesure du micro")
     args = ap.parse_args()
-    toml = build(args.dossier, args.mot_de_passe, args.compte, args.ecoute)
+    sink = f"file:{args.enregistrer}" if args.enregistrer else "null"
+    toml = build(args.dossier, args.mot_de_passe, args.compte, args.ecoute, sink)
     where = "10.0.2.2 (depuis l'émulateur)" if args.ecoute == "127.0.0.1" else args.ecoute
     print(f"Station factice : https://{where}:{GATEWAY_PORT}, compte {args.compte}", flush=True)
     print(f"Empreinte : {certificate_fingerprint(args.dossier / 'station.crt')}", flush=True)
