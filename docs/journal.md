@@ -48,3 +48,12 @@
    Bluetooth, 10 émissions sur charge fictive avec minix-bzh et l'IC-7300MK2 (l'utilisateur devant le poste). Script :
    `tools/telephone/essais-nexus6p.sh`. Remarque : l'APK essayé affichait encore « 0.2.0 » (numéro non reporté sur tour
    radio ; même code que 0.2.1).
+5. [fait ; AAB Google Play construit, NON envoyé ; version 0.2.2, versionCode 4] 2026-11-23, PAQUET GOOGLE PLAY (début du
+   lot 3). `gradlew.bat test lintDebug bundlePlay -PkeystoreProperties=C:/dev/openRemoteTRX/android/keystore.properties`
+   sur le PC de travail en priorité basse (7 min) : la clé d'envoi n'est pas copiée sur tour radio. Même clé d'envoi
+   que l'application principale (CN=RF-DIY, SHA-256 A6:BE:6E:42…:03:78), permise pour une seconde fiche. Résultat :
+   `app/build/outputs/bundle/play/app-play.aab` (30,6 Mo, SHA-256 14d7865b…cc64), signature vérifiée (jarsigner),
+   tests et lint sans erreur. Variante `play` : sans brouillage de l'émission, sans autorisation de localisation
+   (permissions : réseau, Wi-Fi, micro, caméra pour le QR code, notifications, service de premier plan média et micro,
+   verrou de veille, vibreur). RESTENT avant la mise en production : essais du lot 2 non faits (écoute 30 min écran
+   éteint, casque Bluetooth, 10 émissions sur charge fictive) ; fiche Play (seconde fiche) à créer dans la Play Console.
