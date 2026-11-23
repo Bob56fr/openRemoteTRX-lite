@@ -4,7 +4,7 @@
 # Essais de Lite sur le Nexus 6P (Android 8.1) contre la station factice de tour radio (réseau local).
 # Positions des boutons : écran 1440 x 2560 (Nexus 6P) ; adresse adb en Wi-Fi à adapter.
 # Départ : Lite connectée et EN ÉMISSION (autorisation + PTT déjà faits).
-A="$LOCALAPPDATA/Android/Sdk/platform-tools/adb.exe"; D="-s 192.168.1.69:5555"; PKG=com.rfdiy.openremotetrx.lite
+A="$LOCALAPPDATA/Android/Sdk/platform-tools/adb.exe"; D="-s 192.168.1.69:5555"; PKG=com.rf_diy.openremotetrx_lite
 t(){ "$A" $D shell input tap $1 $2; sleep 0.7; }
 st(){ ssh -o LogLevel=ERROR chris@192.168.1.193 "powershell -NoProfile -ExecutionPolicy Bypass -File ptt.ps1" 2>/dev/null | tr -d '\r'; }
 open(){ "$A" $D shell am start -n $PKG/com.rfdiy.openremotetrx.app.MainActivity >/dev/null; sleep 3; t 235 1584; sleep 10; }

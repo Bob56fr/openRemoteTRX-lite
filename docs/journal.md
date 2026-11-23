@@ -57,3 +57,7 @@
    (permissions : réseau, Wi-Fi, micro, caméra pour le QR code, notifications, service de premier plan média et micro,
    verrou de veille, vibreur). RESTENT avant la mise en production : essais du lot 2 non faits (écoute 30 min écran
    éteint, casque Bluetooth, 10 émissions sur charge fictive) ; fiche Play (seconde fiche) à créer dans la Play Console.
+6. [fait ; AAB Google Play reconstruit, NON envoyé ; version 0.2.3, versionCode 5] 2026-11-24, IDENTIFIANT CHANGÉ à la
+   demande de l'utilisateur AVANT tout envoi à Google Play : `com.rfdiy.openremotetrx.lite` devient
+   `com.rf_diy.openremotetrx_lite` (définitif dès le premier envoi). AAB : 30,6 Mo, SHA-256 7bcabe8c…9a43, signature vérifiée (jarsigner). Un téléphone qui a l'ancienne version la voit comme
+   une autre application : désinstaller l'ancienne. Espace de noms du code (`com.rfdiy.openremotetrx.app`) inchangé.

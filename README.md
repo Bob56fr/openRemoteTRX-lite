@@ -18,7 +18,7 @@ sont retirées. Cahier des charges : [`docs/android8-cahier-des-charges.md`](htt
 | `:core` | ce dépôt : service, WebRTC, son, Bluetooth | oui, `minSdk 26` |
 | `:app` | ce dépôt : écrans Compose | oui, `minSdk 26` |
 
-Identifiant : `com.rfdiy.openremotetrx.lite` (ne jamais le changer).
+Identifiant : `com.rf_diy.openremotetrx_lite` (ne jamais le changer).
 
 ## Construire
 

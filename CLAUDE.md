@@ -20,14 +20,14 @@ Client Android d'une station openRemoteTRX pour Android 8.0 à 9 (API 26 à 28).
   (ex. `MediaStore.MediaColumns.RELATIVE_PATH`, API 29) que le lint ne voit pas.
 - **Textes** : aucun texte en dur ; clés du catalogue commun `upstream/android/logic/src/main/resources/i18n/app.<langue>.json`
   (4 langues), un texte propre à Lite s'y ajoute dans le dépôt principal.
-- **Identifiant** `com.rfdiy.openremotetrx.lite` : ne jamais le changer. Version propre (`versionName` / `versionCode`
+- **Identifiant** `com.rf_diy.openremotetrx_lite` : ne jamais le changer. Version propre (`versionName` / `versionCode`
   de `app/build.gradle.kts`) : +1 à chaque livraison.
 - Licence AGPL-3.0-or-later : en-tête SPDX en tête de tout nouveau fichier de code (voir le dépôt principal).
 - Commit et push à la fin de chaque étape ; `git add` seulement des fichiers de l'étape. Journal des étapes :
   `docs/journal.md` (une entrée numérotée par étape, jamais supprimée).
 - Tableau de pilotage : fiche `openremotetrx-lite` (voir le CLAUDE.md du dépôt principal pour l'outil et les règles).
 
-## État actuel (0.2.2, étape 5)
+## État actuel (0.2.3, étape 6)
 
 Lots 0, 1 et 2 FAITS (journal). Lot 2 RÉUSSI sur émulateurs Android 8.1 / 9 ET sur un VRAI téléphone : Nexus 6P de
 l'utilisateur sous Android 8.1 d'origine Google (son reçu, micro, STOP, application tuée, Wi-Fi coupé, écran éteint

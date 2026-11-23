@@ -2,7 +2,7 @@
 # Copyright (C) 2026 RF-DIY.COM
 # Essais de panne d'openRemoteTRX Lite contre la station factice (état lu dans le fichier d'état de la station)
 $adb = Join-Path $env:LOCALAPPDATA "Android\Sdk\platform-tools\adb.exe"
-$pkg = "com.rfdiy.openremotetrx.lite"
+$pkg = "com.rf_diy.openremotetrx_lite"
 function P { Get-Content C:\dev\lite-essai\etat\status.json -Raw | ConvertFrom-Json | ForEach-Object { $_.ptt } }
 function Tap($x, $y) { & $adb shell input tap $x $y; Start-Sleep -Milliseconds 600 }
 function WaitRx($label) {

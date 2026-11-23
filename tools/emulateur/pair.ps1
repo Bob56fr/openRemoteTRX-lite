@@ -6,7 +6,7 @@ $adb = Join-Path $env:LOCALAPPDATA "Android\Sdk\platform-tools\adb.exe"
 foreach ($ime in (& $adb shell ime list -s)) { & $adb shell ime disable $ime.Trim() | Out-Null }   # pas de correction automatique
 function Tap($x, $y) { & $adb shell input tap $x $y; Start-Sleep -Milliseconds 700 }
 function Saisir($t) { & $adb shell input text $t; Start-Sleep -Milliseconds 400 }
-& $adb shell am start -n com.rfdiy.openremotetrx.lite/com.rfdiy.openremotetrx.app.MainActivity | Out-Null
+& $adb shell am start -n com.rf_diy.openremotetrx_lite/com.rfdiy.openremotetrx.app.MainActivity | Out-Null
 Start-Sleep 5
 Tap 775 1188                                   # « I understand »
 Tap 540 390; Saisir "Factice"
