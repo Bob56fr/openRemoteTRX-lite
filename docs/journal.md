@@ -61,3 +61,5 @@
    demande de l'utilisateur AVANT tout envoi à Google Play : `com.rfdiy.openremotetrx.lite` devient
    `com.rf_diy.openremotetrx_lite` (définitif dès le premier envoi). AAB : 30,6 Mo, SHA-256 7bcabe8c…9a43, signature vérifiée (jarsigner). Un téléphone qui a l'ancienne version la voit comme
    une autre application : désinstaller l'ancienne. Espace de noms du code (`com.rfdiy.openremotetrx.app`) inchangé.
+7. [fait ; AAB Google Play 0.2.4, versionCode 10] 2026-11-24 : la Play Console refuse le versionCode 5 (« déjà utilisé ») :
+   versionCode porté à 10. AAB SHA-256 960e7ab0…a87b, signature vérifiée.

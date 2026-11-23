@@ -27,7 +27,7 @@ Client Android d'une station openRemoteTRX pour Android 8.0 à 9 (API 26 à 28).
   `docs/journal.md` (une entrée numérotée par étape, jamais supprimée).
 - Tableau de pilotage : fiche `openremotetrx-lite` (voir le CLAUDE.md du dépôt principal pour l'outil et les règles).
 
-## État actuel (0.2.3, étape 6)
+## État actuel (0.2.4, étape 7)
 
 Lots 0, 1 et 2 FAITS (journal). Lot 2 RÉUSSI sur émulateurs Android 8.1 / 9 ET sur un VRAI téléphone : Nexus 6P de
 l'utilisateur sous Android 8.1 d'origine Google (son reçu, micro, STOP, application tuée, Wi-Fi coupé, écran éteint

@@ -15,8 +15,8 @@ android {
         applicationId = "com.rf_diy.openremotetrx_lite" // ne jamais le changer après le premier envoi à Google Play (2026-11-24)
         minSdk = 26                                     // Android 8.0 (décision de l'utilisateur, 2026-11-22)
         targetSdk = 36
-        versionCode = 5
-        versionName = "0.2.3"
+        versionCode = 10
+        versionName = "0.2.4"
         buildConfigField("boolean", "SCRAMBLER", "true")
         // Sonde réseau : changement de cellule (autorisation de localisation, manifestes debug / release seulement)
         buildConfigField("boolean", "CELL_INFO", "true")
