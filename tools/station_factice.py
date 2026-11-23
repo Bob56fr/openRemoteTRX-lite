@@ -32,15 +32,16 @@ RIGCTLD_PORT = 14532
 BUS_PORT = 47910
 
 
-def build(folder: Path, password: str, account: str) -> Path:
+def build(folder: Path, password: str, account: str, bind: str = "127.0.0.1") -> Path:
     folder.mkdir(parents=True, exist_ok=True)
     cert, key = folder / "station.crt", folder / "station.key"
     if not cert.exists():
-        generate_self_signed(["127.0.0.1", "10.0.2.2", "localhost"], cert, key)
+        hosts = ["127.0.0.1", "10.0.2.2", "localhost"] + ([bind] if bind not in ("127.0.0.1", "0.0.0.0") else [])
+        generate_self_signed(hosts, cert, key)
     cfg = dummy_config()
     cfg.network.rigctld_port = RIGCTLD_PORT
     cfg.network.gateway_port = GATEWAY_PORT
-    cfg.network.gateway_bind = "127.0.0.1"
+    cfg.network.gateway_bind = bind
     cfg.network.tls_cert, cfg.network.tls_key = str(cert), str(key)
     cfg.network.ice_servers = []
     cfg.audio.capture_device = "tone:600"
@@ -63,9 +64,12 @@ def main() -> int:
     ap.add_argument("--dossier", type=Path, required=True)
     ap.add_argument("--mot-de-passe", required=True)
     ap.add_argument("--compte", default="lite")
+    ap.add_argument("--ecoute", default="127.0.0.1",
+                    help="adresse d'écoute : 127.0.0.1 (émulateur) ou l'adresse de la machine dans le réseau local (vrai téléphone)")
     args = ap.parse_args()
-    toml = build(args.dossier, args.mot_de_passe, args.compte)
-    print(f"Station factice : https://10.0.2.2:{GATEWAY_PORT} (depuis l'émulateur), compte {args.compte}", flush=True)
+    toml = build(args.dossier, args.mot_de_passe, args.compte, args.ecoute)
+    where = "10.0.2.2 (depuis l'émulateur)" if args.ecoute == "127.0.0.1" else args.ecoute
+    print(f"Station factice : https://{where}:{GATEWAY_PORT}, compte {args.compte}", flush=True)
     print(f"Empreinte : {certificate_fingerprint(args.dossier / 'station.crt')}", flush=True)
     env = dict(os.environ, PYTHONPATH=str(UPSTREAM))
     rig = subprocess.Popen([sys.executable, "-m", "trxstation.devtools.fake_rigctld", "--port", str(RIGCTLD_PORT)], env=env)

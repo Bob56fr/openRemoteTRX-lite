@@ -32,3 +32,19 @@
    `start-emu.ps1`, `pair.ps1`, `drills.ps1`, `adbdo.ps1`, `build-lite.cmd`, `rebuild.cmd`). Pièges : désactiver les claviers
    de l'émulateur (`ime disable`, sinon « F7 » devient « For »), « Type » est un alias de PowerShell, attendre 4 s entre
    STOP et une nouvelle prise (délai de la station).
+4. [fait ; essais sur un VRAI téléphone Android 8.1 RÉUSSIS ; version 0.2.1] 2026-11-23, PREMIER TÉLÉPHONE RÉEL : Nexus 6P
+   (angler) de l'utilisateur, rooté et sans système : bootloader déverrouillé, image d'usine Google 8.1.0
+   OPM7.181205.001 (dernière du 6P, SHA-256 b75ce068…, téléchargée chez Google) écrite par `fastboot -w update` (système
+   seul : bootloader 03.84 et modem 03.88 déjà à jour) ; démarrages en boucle = ALIMENTATION insuffisante (pas le défaut
+   des gros cœurs : le contournement à 4 cœurs préparé n'a pas servi) ; adb par le Wi-Fi après un branchement USB
+   (`adb tcpip 5555`). Station factice sur le RÉSEAU LOCAL de tour radio (`--ecoute 192.168.1.193`, certificat à cette
+   adresse, règle de pare-feu TEMPORAIRE `tools/emulateur/pare-feu.ps1`, retirée ensuite). RÉSULTATS : appairage par la
+   fiche (clavier du téléphone coupé le temps de la saisie, remis ensuite), connexion en Wi-Fi (19 à 37 ms), SON REÇU
+   joué (lecteur audio actif, sortie hors veille), émission avec MICRO OUVERT (entrée audio active), STOP = réception,
+   application tuée pendant l'émission = réception en ~2 s (battements), Wi-Fi du téléphone coupé pendant l'émission =
+   réception en ~2 s puis RECONNEXION SEULE EN RÉCEPTION (autorisation d'émettre remise à zéro, cause « perte du signal de
+   vie du client » affichée), ÉCRAN ÉTEINT 3 min (veille « Dozing ») : son toujours joué, service vivant, liaison
+   entretenue. Temps mesurés à ~0,5 s près (lecture de l'état par SSH). RESTENT : écoute 30 min écran éteint, casque
+   Bluetooth, 10 émissions sur charge fictive avec minix-bzh et l'IC-7300MK2 (l'utilisateur devant le poste). Script :
+   `tools/telephone/essais-nexus6p.sh`. Remarque : l'APK essayé affichait encore « 0.2.0 » (numéro non reporté sur tour
+   radio ; même code que 0.2.1).

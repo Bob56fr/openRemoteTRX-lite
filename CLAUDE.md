@@ -27,12 +27,13 @@ Client Android d'une station openRemoteTRX pour Android 8.0 à 9 (API 26 à 28).
   `docs/journal.md` (une entrée numérotée par étape, jamais supprimée).
 - Tableau de pilotage : fiche `openremotetrx-lite` (voir le CLAUDE.md du dépôt principal pour l'outil et les règles).
 
-## État actuel (0.2.1, étape 3)
+## État actuel (0.2.1, étape 4)
 
-Lots 0, 1 et 2 (émulateurs) FAITS (journal) : sur Android 8.1 et 9, connexion, émission, STOP et pannes (application
-tuée, réseau coupé) réussis contre la station factice. SUIVANT : vrai téléphone Android 8 ou 9 (l'utilisateur en
-cherche un) : son reçu, micro, casque Bluetooth, écran éteint 30 min, 10 émissions sur charge fictive ; puis lot 3
-(publication). Comparaison des fonctions : § 4 bis du cahier.
+Lots 0, 1 et 2 FAITS (journal). Lot 2 RÉUSSI sur émulateurs Android 8.1 / 9 ET sur un VRAI téléphone : Nexus 6P de
+l'utilisateur sous Android 8.1 d'origine Google (son reçu, micro, STOP, application tuée, Wi-Fi coupé, écran éteint
+3 min). SUIVANT : écoute 30 min écran éteint, casque Bluetooth, 10 émissions sur charge fictive avec minix-bzh et
+l'IC-7300MK2 (utilisateur devant le poste) ; puis lot 3 (publication). Le Nexus 6P manque d'ALIMENTATION (redémarrages
+en boucle sur un port USB faible) : bon chargeur ou hub USB alimenté. Comparaison des fonctions : § 4 bis du cahier.
 
 ## Essais sur émulateur (tour radio)
 
